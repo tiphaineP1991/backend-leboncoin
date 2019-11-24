@@ -1,0 +1,95 @@
+const express = require("express");
+const router = express.Router();
+const cloudinary = require("cloudinary");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const User = require("../Models/User");
+const Product = require("../Models/Product");
+
+router.post("/publish", async (req, res) => {
+  try {
+    const authentication = req.headers.authorization;
+    if (!authentication) {
+      res.status(400).json({ error: "User non connecté" });
+      return;
+    }
+
+    const parts = req.headers.authorization.split(" ");
+    if (parts.length !== 2 || parts[0] !== "Bearer") {
+      res.status(401).json({
+        error: "Invalid Authorization Header"
+      });
+      return;
+    }
+    const token = parts[1];
+
+    const user = await User.findOne({ token: token });
+    if (!user) {
+      res.status(400).json({ error: "User n'existe pas'" });
+      return;
+    }
+    console.log("user:", user);
+
+    const files = Object.keys(req.files);
+    if (files.length) {
+      const results = {};
+      files.forEach(fileKey => {
+        cloudinary.v2.uploader.upload(
+          req.files[fileKey].path,
+          {
+            folder: "leboncoin"
+          },
+          (error, result) => {
+            if (error) {
+              results[fileKey] = {
+                success: false,
+                error: error
+              };
+            } else {
+              results[fileKey] = {
+                success: true,
+                result: result
+              };
+            }
+            if (Object.keys(results).length === files.length) {
+              console.log(results);
+              const newProduct = new Product({
+                title: req.fields.title,
+                description: req.fields.description,
+                price: req.fields.price,
+                created: new Date(),
+                files: results.files.result.secure_url,
+                user: user
+              });
+
+              newProduct.save();
+              console.log(newProduct);
+              return res.json({
+                _id: newProduct._id,
+                title: newProduct.title,
+                description: newProduct.description,
+                price: newProduct.price,
+                files: newProduct.files,
+                user: {
+                  account: newProduct.user.account,
+                  _id: newProduct.user._id
+                }
+              });
+            }
+          }
+        );
+      });
+    } else {
+      console.log("No file uploaded ! ");
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+module.exports = router;
