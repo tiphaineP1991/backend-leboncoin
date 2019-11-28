@@ -68,7 +68,6 @@ router.post("/publish", async (req, res) => {
               });
 
               newProduct.save();
-              console.log(newProduct);
               return res.json({
                 _id: newProduct._id,
                 title: newProduct.title,
