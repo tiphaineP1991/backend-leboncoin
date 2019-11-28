@@ -4,12 +4,10 @@ require("dotenv").config();
 // DEMARRER MON SERVEUR
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const formidableMiddleware = require("express-formidable");
 const cors = require("cors");
 
 const app = express();
-app.use(bodyParser.json());
 
 app.use(formidableMiddleware());
 
