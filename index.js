@@ -48,6 +48,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 // ECOUTER MON SERVEUR
-app.listen(process.env.PORT, () => {
+app.listen(3000, () => {
   console.log("Server started");
 });
