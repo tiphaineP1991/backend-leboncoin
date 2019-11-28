@@ -47,11 +47,14 @@ router.post("/publish", async (req, res) => {
           },
           (error, result) => {
             if (error) {
+              console.log("coucou ici");
+
               results[fileKey] = {
                 success: false,
                 error: error
               };
             } else {
+              console.log("coucou là-bas");
               results[fileKey] = {
                 success: true,
                 result: result
