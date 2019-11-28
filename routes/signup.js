@@ -10,6 +10,8 @@ const User = require("../Models/User");
 //ROUTE 1 POST
 
 router.post("/signup", async (req, res) => {
+  console.log("coucou");
+
   try {
     const token = uid2(64);
     const salt = uid2(64);
