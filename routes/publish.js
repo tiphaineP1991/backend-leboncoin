@@ -56,6 +56,11 @@ router.post("/publish", async (req, res) => {
                 result: result
               };
             }
+            console.log("files.length ===>", files.length);
+            console.log(
+              "Object.keys(results).length  ===>",
+              Object.keys(results).length
+            );
             if (Object.keys(results).length === files.length) {
               console.log(results);
               const newProduct = new Product({
