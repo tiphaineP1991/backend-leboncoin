@@ -36,6 +36,9 @@ app.use(offersRoutes);
 const offerRoutes = require("./routes/offer");
 app.use(offerRoutes);
 
+const testRoutes = require("./routes/test");
+app.use(testRoutes);
+
 // Configurer Cloudinary
 
 // CONNECTER MA BDD
@@ -45,6 +48,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 // ECOUTER MON SERVEUR
-app.listen(4000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Server started");
 });
