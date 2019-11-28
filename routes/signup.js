@@ -11,30 +11,31 @@ const User = require("../Models/User");
 
 router.post("/signup", async (req, res) => {
   console.log("coucou");
+  res.send("coucou");
 
-  try {
-    const token = uid2(64);
-    const salt = uid2(64);
-    const hash = SHA256(req.fields.password + salt).toString(encBase64);
+  // try {
+  //   const token = uid2(64);
+  //   const salt = uid2(64);
+  //   const hash = SHA256(req.fields.password + salt).toString(encBase64);
 
-    const newUser = new User({
-      email: req.fields.email,
-      token: token,
-      salt: salt,
-      hash: hash,
-      account: {
-        username: req.fields.username
-      }
-    });
-    await newUser.save();
-    res.json({
-      _id: newUser._id,
-      token: newUser.token,
-      account: newUser.account
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+  //   const newUser = new User({
+  //     email: req.fields.email,
+  //     token: token,
+  //     salt: salt,
+  //     hash: hash,
+  //     account: {
+  //       username: req.fields.username
+  //     }
+  //   });
+  //   await newUser.save();
+  //   res.json({
+  //     _id: newUser._id,
+  //     token: newUser.token,
+  //     account: newUser.account
+  //   });
+  // } catch (error) {
+  //   res.status(400).json({ message: error.message });
+  // }
 });
 
 module.exports = router;
