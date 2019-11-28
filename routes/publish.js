@@ -36,10 +36,10 @@ router.post("/publish", async (req, res) => {
     console.log("user:", user);
 
     const files = Object.keys(req.files);
-    console.log("files ====>", files);
     if (files.length) {
       const results = {};
       files.forEach(fileKey => {
+        console.log("file path ====>", req.files[fileKey].path);
         cloudinary.v2.uploader.upload(
           req.files[fileKey].path,
           {
