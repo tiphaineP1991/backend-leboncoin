@@ -11,8 +11,7 @@ const User = require("../Models/User");
 
 router.post("/login", async (req, res) => {
   try {
-    const email = req.fields.email;
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: req.fields.email });
     if (user) {
       if (
         SHA256(req.fields.password + user.salt).toString(encBase64) ===
