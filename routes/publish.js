@@ -34,7 +34,7 @@ router.post("/publish", async (req, res) => {
       return;
     }
     console.log("user:", user);
-
+    console.log("req.files ===>", req.files);
     const files = Object.keys(req.files);
     if (files.length) {
       const results = {};
