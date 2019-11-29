@@ -54,7 +54,7 @@ router.post("/publish", async (req, res) => {
                 error: error
               };
             } else {
-              console.log("coucou là-bas");
+              console.log("coucou là");
               results[fileKey] = {
                 success: true,
                 result: result
