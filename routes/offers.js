@@ -8,18 +8,18 @@ router.get("/offers/with-count", async (req, res) => {
   try {
     const createFilters = req => {
       const filters = {};
-      if (req.query.priceMin) {
+      if (req.query.searchMinPrice) {
         filters.price = {};
-        filters.price.$gte = req.query.priceMin;
+        filters.price.$gte = req.query.searchMinPrice;
       }
-      if (req.query.priceMax) {
+      if (req.query.searchMaxPrice) {
         if (filters.price === undefined) {
           filters.price = {};
         }
-        filters.price.$lte = req.query.priceMax;
+        filters.price.$lte = req.query.searchMaxPrice;
       }
-      if (req.query.search) {
-        filters.title = new RegExp(req.query.search, "i");
+      if (req.query.searchTitle) {
+        filters.searchTitle = new RegExp(req.query.search, "i");
       }
       return filters;
     };
