@@ -33,6 +33,7 @@ router.post("/publish", async (req, res) => {
       res.status(400).json({ error: "User n'existe pas'" });
       return;
     }
+
     console.log("user:", user);
     console.log("req.files ===>", req.files);
     const files = Object.keys(req.files);

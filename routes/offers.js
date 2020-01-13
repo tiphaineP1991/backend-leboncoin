@@ -6,17 +6,40 @@ const User = require("../Models/User");
 
 router.get("/offers/with-count", async (req, res) => {
   try {
-    const object = {};
-    const products = await Product.find();
+    const createFilters = req => {
+      const filters = {};
+      if (req.query.priceMin) {
+        filters.price = {};
+        filters.price.$gte = req.query.priceMin;
+      }
+      if (req.query.priceMax) {
+        if (filters.price === undefined) {
+          filters.price = {};
+        }
+        filters.price.$lte = req.query.priceMax;
+      }
+      if (req.query.search) {
+        filters.title = new RegExp(req.query.search, "i");
+      }
+      return filters;
+    };
+    const filters = createFilters(req);
+    const search = Offer.find(filters);
 
-    let count = null;
-    for (let i = 0; i < products.length; i++) {
-      count = count + 1;
+    // Here we sort the array by price
+    if (req.query.sort === "price-asc") {
+      search.sort({ price: 1 });
+    } else if (req.query.sort === "price-desc") {
+      search.sort({ price: -1 });
     }
 
-    object.count = count;
-    object.offers = products;
-    res.json(object);
+    // Here we deal with the pagination
+    if (req.query.limit) {
+      search.skip(Number(req.query.skip)).limit(Number(req.query.limit));
+    }
+    const offers = await search;
+    const count = await Offer.find(); // To get the total number of offer (for pagination)
+    res.json({ count: count.length, offers: offers });
   } catch (error) {
     res.json({ message: error.message });
   }
