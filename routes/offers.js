@@ -31,6 +31,8 @@ router.get("/offers/with-count?", async (req, res) => {
 
     let offers = Product.find(filters);
 
+    let length = Product.find(filters);
+
     // Puis pour trier par ordre croissant ou décroissant : il faut écrire les deux possibilités avec des conditions. Attention quand on trie, on enleve le AWAIT de la fonction
     if (req.query.sort) {
       if (req.query.sort === "price-asc") {
@@ -42,12 +44,15 @@ router.get("/offers/with-count?", async (req, res) => {
     }
 
     // Puis on gère la pagination
-    // if (req.query.skip) {
-    //   const result = req.query.skip;
-    //   const limit = req.query.limit;
-    //   offers.limit(limit);
-    //   offers.skip(limit * (result - 1));
-    // }
+    if (req.query.skip) {
+      const result = req.query.skip;
+      const limit = 10;
+      offers.limit(limit);
+      offers.skip(limit * (result - 1));
+    }
+
+    const data = await length;
+    list.count = data.length;
 
     list.offers = await offers;
     res.json(list);
